@@ -1,0 +1,17 @@
+# Hanya override yang perlu berubah saat di container
+spring:
+  datasource:
+    # Defaultnya mengarah ke service MySQL bernama "db" di docker-compose
+    url: ${DB_URL:jdbc:mysql://db:3306/nutech_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Jakarta}
+    username: ${DB_USER:ppob_user}
+    password: ${DB_PASS:ppob_pass}
+
+server:
+  # Boleh pakai env PORT; default ke 8080
+  port: ${PORT:8080}
+
+app:
+  jwt:
+    # Pakai env yang sama dengan yang sudah kamu gunakan
+    secret: ${JWT_SECRET:change-this-secret}
+    ttl-hours: ${JWT_TTL_HOURS:12}
