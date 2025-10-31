@@ -16,7 +16,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 // izinkan endpoint publik
-                .requestMatchers("/ping", "/actuator/**", "/registration", "/login").permitAll()
+                .requestMatchers("/db/check", "/ping", "/actuator/**", "/registration", "/login").permitAll()
                 // yang lain tetap butuh auth
                 .anyRequest().authenticated()
             )
