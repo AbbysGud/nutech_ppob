@@ -22,28 +22,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwt;
+  private final JwtUtil jwt;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain fc)
-            throws ServletException, IOException {
+  @Override
+  protected void doFilterInternal(
+    HttpServletRequest req, 
+    HttpServletResponse res, 
+    FilterChain fc
+  ) throws ServletException, IOException {
 
-        String header = req.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
-            try {
-                if (jwt.isValid(token)) {
-                    String subject = jwt.getSubject(token); // email atau userId
-                    Authentication authn = new UsernamePasswordAuthenticationToken(subject, null, List.of());
-                    SecurityContextHolder.getContext().setAuthentication(authn);
-                }
-            } catch (JwtException ex) {
-                // Token invalid/expired → biarkan tanpa auth; EntryPoint akan handle 401 jika endpoint butuh auth
-                log.warn("Invalid JWT: {}", ex.getMessage());
-            } catch (Exception ex) {
-                log.error("JWT filter error", ex);
-            }
+    String header = req.getHeader(HttpHeaders.AUTHORIZATION);
+    if (header != null && header.startsWith("Bearer ")) {
+      String token = header.substring(7);
+      try {
+        if (jwt.isValid(token)) {
+          String subject = jwt.getSubject(token); // email atau userId
+          Authentication authn = new UsernamePasswordAuthenticationToken(subject, null, List.of());
+          SecurityContextHolder.getContext().setAuthentication(authn);
         }
-        fc.doFilter(req, res);
+      } catch (JwtException ex) {
+        // Token invalid/expired → biarkan tanpa auth; EntryPoint akan handle 401 jika
+        // endpoint butuh auth
+        log.warn("Invalid JWT: {}", ex.getMessage());
+      } catch (Exception ex) {
+        log.error("JWT filter error", ex);
+      }
     }
+    fc.doFilter(req, res);
+  }
 }

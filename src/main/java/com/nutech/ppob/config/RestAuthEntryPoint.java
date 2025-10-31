@@ -12,14 +12,17 @@ import java.io.IOException;
 
 @Component
 public class RestAuthEntryPoint implements AuthenticationEntryPoint {
-    private final ObjectMapper om = new ObjectMapper();
+  private final ObjectMapper om = new ObjectMapper();
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex)
-            throws IOException {
-        response.setStatus(401);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        om.writeValue(response.getOutputStream(), 
-            ApiResponse.of(108, "Token tidak tidak valid atau kadaluwarsa", null));
-    }
+  @Override
+  public void commence(
+    HttpServletRequest request, 
+    HttpServletResponse response, 
+    AuthenticationException ex
+  ) throws IOException {
+    response.setStatus(401);
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    om.writeValue(response.getOutputStream(),
+      ApiResponse.of(108, "Token tidak tidak valid atau kadaluwarsa", null));
+  }
 }

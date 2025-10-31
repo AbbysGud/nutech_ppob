@@ -8,11 +8,11 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Configuration
 public class DispatcherConfig {
 
-    @Bean
-    public ServletRegistrationBean<DispatcherServlet> dispatcherRegistration(DispatcherServlet dispatcherServlet) {
-        ServletRegistrationBean<DispatcherServlet> registration = new ServletRegistrationBean<>(dispatcherServlet);
-        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-        registration.setLoadOnStartup(1);
-        return registration;
-    }
+  @Bean
+  public ServletRegistrationBean<DispatcherServlet> dispatcherRegistration(DispatcherServlet dispatcherServlet) {
+    ServletRegistrationBean<DispatcherServlet> registration = new ServletRegistrationBean<>(dispatcherServlet);
+    dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+    registration.setLoadOnStartup(1);
+    return registration;
+  }
 }

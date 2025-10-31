@@ -12,19 +12,19 @@ import java.util.List;
 @RestController
 public class ContentController {
 
-    private final ContentService service;
+  private final ContentService service;
 
-    public ContentController(ContentService service) {
-        this.service = service;
-    }
+  public ContentController(ContentService service) {
+    this.service = service;
+  }
 
-    @GetMapping("/banner")
-    public ResponseEntity<ApiResponse<List<BannerItem>>> listBanners() {
-        return ResponseEntity.ok(ApiResponse.ok("Sukses", service.listBanners()));
-    }
+  @GetMapping("/banner")
+  public ResponseEntity<ApiResponse<List<BannerItem>>> listBanners() {
+    return ResponseEntity.ok(ApiResponse.ok("Sukses", service.listBanners()));
+  }
 
-    @GetMapping("/services")
-    public ResponseEntity<ApiResponse<List<ServiceItem>>> listServices() {
-        return ResponseEntity.ok(ApiResponse.ok("Sukses", service.listServices()));
-    }
+  @GetMapping("/services")
+  public ResponseEntity<ApiResponse<List<ServiceItem>>> listServices() {
+    return ResponseEntity.ok(ApiResponse.ok("Sukses", service.listServices()));
+  }
 }

@@ -44,10 +44,23 @@ public class WalletRepo {
 
   public int insertTopupTx(long userId, String invoice, long amount, long before, long after) {
     String sql = """
-      INSERT INTO wallet_transactions
-        (user_id, invoice_number, transaction_type, amount,
-         balance_before, balance_after, description)
-      VALUES (?,?,?,?,?,?,?)
+      INSERT INTO wallet_transactions (
+        user_id, 
+        invoice_number, 
+        transaction_type, 
+        amount,
+        balance_before, 
+        balance_after, 
+        description
+      ) VALUES (
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?
+      )
     """;
     return jdbc.update(sql, ps -> {
       ps.setLong(1, userId);
@@ -63,7 +76,10 @@ public class WalletRepo {
   public int updateWalletBalance(long userId, long newBalance) {
     String sql = """
       UPDATE wallets
-      SET balance = ?, version = version + 1, updated_at = CURRENT_TIMESTAMP
+      SET 
+        balance = ?, 
+        version = version + 1, 
+        updated_at = CURRENT_TIMESTAMP
       WHERE user_id = ?
     """;
     return jdbc.update(sql, ps -> {

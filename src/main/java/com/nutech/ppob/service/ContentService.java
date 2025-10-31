@@ -10,17 +10,17 @@ import java.util.List;
 @Service
 public class ContentService {
 
-    private final ContentRepo repo;
+  private final ContentRepo repo;
 
-    public ContentService(ContentRepo repo) {
-        this.repo = repo;
-    }
+  public ContentService(ContentRepo repo) {
+    this.repo = repo;
+  }
 
-    public List<BannerItem> listBanners() {
-        return repo.findActiveBanners();
-    }
+  public List<BannerItem> listBanners() {
+    return repo.findActiveBanners();
+  }
 
-    public List<ServiceItem> listServices() {
-        return repo.findActiveServices();
-    }
+  public List<ServiceItem> listServices() {
+    return repo.findActiveServices();
+  }
 }

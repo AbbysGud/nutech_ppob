@@ -10,12 +10,11 @@ import java.util.Map;
 @RequestMapping("/secure")
 public class SecureTestController {
 
-    @GetMapping("/ping")
-    public ApiResponse<Map<String, Object>> securePing(Authentication auth) {
-        String subject = auth != null ? String.valueOf(auth.getPrincipal()) : "anonymous";
-        return ApiResponse.ok("secure pong", Map.of(
-                "subject", subject,
-                "status", "OK"
-        ));
-    }
+  @GetMapping("/ping")
+  public ApiResponse<Map<String, Object>> securePing(Authentication auth) {
+    String subject = auth != null ? String.valueOf(auth.getPrincipal()) : "anonymous";
+    return ApiResponse.ok("secure pong", Map.of(
+      "subject", subject,
+      "status", "OK"));
+  }
 }

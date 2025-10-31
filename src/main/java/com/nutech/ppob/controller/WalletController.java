@@ -23,8 +23,9 @@ public class WalletController {
 
   @PostMapping("/topup")
   public ResponseEntity<ApiResponse<TopupResponse>> topup(
-      Authentication auth,
-      @Valid @RequestBody TopupRequest req) {
+    Authentication auth,
+    @Valid @RequestBody TopupRequest req
+  ) {
     String email = (String) auth.getPrincipal();
 
     if (req.top_up_amount() == null || req.top_up_amount() < 0) {
