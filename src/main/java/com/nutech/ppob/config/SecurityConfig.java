@@ -15,7 +15,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private static final String[] PUBLIC_POST = { "/registration", "/login" };
-    private static final String[] PUBLIC_GET  = { "/actuator/**", "/ping", "/db/check" };
+    private static final String[] PUBLIC_GET  = { "/actuator/**", "/ping", "/db/check", "/banner" };
 
     private final JwtAuthFilter jwtFilter;
     private final RestAuthEntryPoint entryPoint;

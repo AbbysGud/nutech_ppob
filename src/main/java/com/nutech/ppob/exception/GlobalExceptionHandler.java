@@ -18,64 +18,63 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> handleValidation(MethodArgumentNotValidException ex){
         String msg = ex.getBindingResult().getFieldErrors().stream()
-                .findFirst().map(f -> f.getField() + " " + f.getDefaultMessage())
-                .orElse("Validation error");
+                .findFirst()
+                .map(f -> {
+                    if ("email".equals(f.getField())) return "Paramter email tidak sesuai format";
+                    return "Parameter tidak valid";
+                })
+                .orElse("Parameter tidak valid");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(ErrorCode.VALIDATION.code, msg));
+                .body(ApiResponse.of(102, msg, null));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<Void>> handleBodyParse(HttpMessageNotReadableException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(ErrorCode.BAD_REQUEST.code, "Malformed JSON body"));
+                .body(ApiResponse.of(102, "Parameter tidak valid", null));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApiResponse<Void>> handleTypeMismatch(MethodArgumentTypeMismatchException ex){
-        String msg = "Invalid parameter: " + ex.getName();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(ErrorCode.BAD_REQUEST.code, msg));
+                .body(ApiResponse.of(102, "Parameter tidak valid", null));
     }
 
     @ExceptionHandler({NoHandlerFoundException.class, NoResourceFoundException.class})
     public ResponseEntity<ApiResponse<Void>> handleNotFound404(Exception ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ApiResponse.error(ErrorCode.NOT_FOUND.code, "Not found"));
+                .body(ApiResponse.of(404, "Not found", null));
     }
 
+    // 103 - wrong credentials (login)
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse<Void>> handleBadCred(BadCredentialsException ex){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error(ErrorCode.UNAUTHORIZED.code, "Invalid credentials"));
+                .body(ApiResponse.of(103, "Username atau password salah", null));
     }
 
+    // 403 - not specified di kontrak; tetap jaga rapi
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<Void>> handleDenied(AccessDeniedException ex){
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(ApiResponse.error(ErrorCode.FORBIDDEN.code, "Forbidden"));
+                .body(ApiResponse.of(403, "Forbidden", null));
     }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusiness(BusinessException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(ex.getError().code, ex.getMessage()));
+                .body(ApiResponse.of(102, ex.getMessage(), null));
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ApiResponse<Void>> handleMaxUpload(MaxUploadSizeExceededException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("400", "Image too large (max 5 MB)"));
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse<Void>> handleNotFound(ResourceNotFoundException ex){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ApiResponse.error(ErrorCode.NOT_FOUND.code, ex.getMessage()));
+                .body(ApiResponse.of(102, "Format Image tidak sesuai", null));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleOther(Exception ex){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error(ErrorCode.INTERNAL.code, "Internal server error"));
+                .body(ApiResponse.of(500, "Internal server error", null));
     }
 }

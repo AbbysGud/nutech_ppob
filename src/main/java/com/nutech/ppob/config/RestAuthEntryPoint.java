@@ -19,6 +19,7 @@ public class RestAuthEntryPoint implements AuthenticationEntryPoint {
             throws IOException {
         response.setStatus(401);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        om.writeValue(response.getOutputStream(), ApiResponse.error("401", "Unauthorized"));
+        om.writeValue(response.getOutputStream(), 
+            ApiResponse.of(108, "Token tidak tidak valid atau kadaluwarsa", null));
     }
 }

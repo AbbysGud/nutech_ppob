@@ -21,16 +21,12 @@ public class AuthController {
     @PostMapping("/registration")
     public ResponseEntity<ApiResponse<Map<String,Object>>> register(@Valid @RequestBody RegistrationRequest req){
         users.register(req);
-        return ResponseEntity.ok(ApiResponse.ok("Register success", Map.of(
-                "email", req.email(),
-                "first_name", req.firstName(),
-                "last_name", req.lastName()
-        )));
+        return ResponseEntity.ok(ApiResponse.ok("Registrasi berhasil silahkan login", null));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest req){
-        var resp = users.login(req);
-        return ResponseEntity.ok(ApiResponse.ok("Login success", resp));
+    public ResponseEntity<ApiResponse<Map<String,String>>> login(@Valid @RequestBody LoginRequest req){
+        var token = users.login(req).token();
+        return ResponseEntity.ok(ApiResponse.ok("Login Sukses", Map.of("token", token)));
     }
 }

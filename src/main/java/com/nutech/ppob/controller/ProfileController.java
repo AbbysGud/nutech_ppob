@@ -10,12 +10,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.*;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -32,32 +30,34 @@ public class ProfileController {
     public ResponseEntity<ApiResponse<ProfileResponse>> getProfile(Authentication auth){
         String email = (String) auth.getPrincipal();
         var profile = users.getProfile(email);
-        return ResponseEntity.ok(ApiResponse.ok("OK", profile));
+        return ResponseEntity.ok(ApiResponse.ok("Sukses", profile));
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<Map<String,Object>>> updateProfile(
+    public ResponseEntity<ApiResponse<ProfileResponse>> updateProfile(
             Authentication auth,
             @Valid @RequestBody ProfileUpdateRequest req) {
         String email = (String) auth.getPrincipal();
-        users.updateProfile(email, req);
-        return ResponseEntity.ok(ApiResponse.ok("Profile updated", Map.of(
-                "first_name", req.firstName(),
-                "last_name", req.lastName()
-        )));
+        var updated = users.updateProfileAndReturn(email, req);
+        return ResponseEntity.ok(ApiResponse.ok("Update Pofile berhasil", updated));
     }
 
     @PutMapping(path = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<Map<String,Object>>> uploadProfileImage(
+    public ResponseEntity<ApiResponse<ProfileResponse>> uploadProfileImage(
             Authentication auth,
             @RequestParam("file") MultipartFile file) {
 
-        if (file.isEmpty()) throw new BusinessException("Image file required");
-        if (file.getSize() > 2 * 1024 * 1024) throw new BusinessException("Image too large (max 2 MB)");
+        if (file.isEmpty()) throw new BusinessException("Format Image tidak sesuai"); // treat as invalid
 
-        String ext = StringUtils.trimAllWhitespace(FilenameUtils.getExtension(file.getOriginalFilename())).toLowerCase();
-        if (!(ext.equals("jpg") || ext.equals("jpeg") || ext.equals("png") || ext.equals("webp"))) {
-            throw new BusinessException("Invalid image type");
+        String original = file.getOriginalFilename();
+        String ext = original != null ? FilenameUtils.getExtension(original).trim().toLowerCase() : "";
+
+        if (!(ext.equals("jpg") || ext.equals("jpeg") || ext.equals("png"))) {
+            throw new BusinessException("Format Image tidak sesuai");
+        }
+
+        if (file.getSize() > 5L * 1024 * 1024) {
+            throw new BusinessException("Format Image tidak sesuai");
         }
 
         try {
@@ -70,11 +70,11 @@ public class ProfileController {
 
             String url = "/uploads/" + filename;
             String email = (String) auth.getPrincipal();
-            users.updateProfileImage(email, url);
+            var updated = users.updateProfileImageAndReturn(email, url);
 
-            return ResponseEntity.ok(ApiResponse.ok("Profile image updated", Map.of("profile_image_url", url)));
+            return ResponseEntity.ok(ApiResponse.ok("Update Profile Image berhasil", updated));
         } catch (Exception e) {
-            throw new BusinessException("Failed to save image");
+            throw new BusinessException("Format Image tidak sesuai");
         }
     }
 }
