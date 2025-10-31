@@ -9,6 +9,14 @@ spring:
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+      resolve-lazily: true
+  web:
+    resources:
+      add-mappings: false
 
 management:
   endpoints:
@@ -23,5 +31,5 @@ server:
 
 app:
   jwt:
-    secret: ${JWT_SECRET:dev-secret-change-me}
-    expires-in-hours: 12
+    secret: ${JWT_SECRET:my-super-long-jwt-secret-for-ppob-2025-10-31-abcdefghijkl}
+    ttl-hours: ${JWT_TTL_HOURS:12}
