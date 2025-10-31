@@ -33,7 +33,7 @@ public class ProfileController {
         return ResponseEntity.ok(ApiResponse.ok("Sukses", profile));
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<ApiResponse<ProfileResponse>> updateProfile(
             Authentication auth,
             @Valid @RequestBody ProfileUpdateRequest req) {
