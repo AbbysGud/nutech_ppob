@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:tc:mysql:8.0:///testdb
+    username: test
+    password: test
+server:
+  port: 0
+logging:
+  level:
+    root: warn

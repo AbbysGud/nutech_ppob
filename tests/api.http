@@ -1,0 +1,65 @@
+### Base variables
+@host = http://localhost:8080
+@contentType = application/json
+@token = {{login.response.body.$.data.token}}
+
+### 1) Registration
+# @name registration
+POST {{host}}/registration
+Content-Type: {{contentType}}
+
+{
+  "email": "ariqtest@example.com",
+  "password": "password123",
+  "firstName": "Ariq",
+  "lastName": "Sugiharto"
+}
+
+### 2) Login
+# @name login
+POST {{host}}/login
+Content-Type: {{contentType}}
+
+{
+  "email": "ariqtest@example.com",
+  "password": "password123"
+}
+
+### 3) Get Profile
+GET {{host}}/profile
+Authorization: Bearer {{token}}
+
+### 4) Balance
+GET {{host}}/balance
+Authorization: Bearer {{token}}
+
+### 5) Topup
+POST {{host}}/topup
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "top_up_amount": 100000
+}
+
+### 6) Payment (saldo cukup)
+POST {{host}}/transaction
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "service_code": "PULSA"
+}
+
+### 7) Payment (gagal saldo tidak cukup) — jalankan berkali-kali hingga saldo habis
+POST {{host}}/transaction
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "service_code": "PLN"
+}
+
+### 8) History (pagination)
+GET {{host}}/transaction/history?offset=0&limit=3
+Authorization: Bearer {{token}}
