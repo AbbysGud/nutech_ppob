@@ -22,6 +22,8 @@ public class GlobalExceptionHandler {
       .map(f -> {
         if ("email".equals(f.getField()))
           return "Paramter email tidak sesuai format";
+        if ("top_up_amount".equals(f.getField()))
+          return f.getDefaultMessage();
         return "Parameter tidak valid";
       })
       .orElse("Parameter tidak valid");
