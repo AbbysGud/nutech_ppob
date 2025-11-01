@@ -34,6 +34,7 @@ Kontrak respons, pesan, dan struktur field diikuti **persis** sesuai dokumen (te
 │  └─ api.http
 ├─ schema.sql
 ├─ seed.sql
+├─ trigger.sql
 ├─ Dockerfile
 ├─ docker-compose.yml
 ├─ .gitignore
@@ -82,8 +83,8 @@ Kontrak respons, pesan, dan struktur field diikuti **persis** sesuai dokumen (te
    GRANT ALL ON ppob.* TO 'ppob_user'@'%';
    FLUSH PRIVILEGES;
    ```
-2. Import `schema.sql` (+ `seed.sql` opsional).
-3. Atur `application.yml` atau gunakan variabel env seperti Opsi A.
+2. Import `schema.sql` + `trigger.sql` (+ `seed.sql` opsional).
+3. Atur `application.yml`.
 4. Jalankan `./mvnw spring-boot:run`.
 
 > Aplikasi tidak memakai JPA; semua query adalah **raw SQL** dengan **prepared statements**.
